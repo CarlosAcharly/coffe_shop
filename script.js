@@ -629,3 +629,35 @@ document.addEventListener('DOMContentLoaded', () => {
         irAPantalla(parts[0], parts[1]);
     }
 });
+
+// script.js - Añade esta función
+
+// Función para abrir el panel de administración
+window.abrirAdmin = function() {
+    // Abrir admin.html en la misma pestaña
+    window.location.href = 'admin.html';
+};
+
+// Actualiza la función renderNavBar para que el botón Admin use la nueva función
+function renderNavBar(pantallaActiva) {
+    return `
+        <nav class="fixed bottom-0 left-0 right-0 flex border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2 z-50" style="max-width: 448px; margin: 0 auto;">
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'inicio' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('inicio'); return false;">
+                <span class="material-symbols-outlined ${pantallaActiva === 'inicio' ? 'fill-1' : ''}">home</span>
+                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Inicio</p>
+            </a>
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'menu' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('menu'); return false;">
+                <span class="material-symbols-outlined ${pantallaActiva === 'menu' ? 'fill-1' : ''}">coffee</span>
+                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Menú</p>
+            </a>
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'carrito' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('carrito'); return false;">
+                <span class="material-symbols-outlined ${pantallaActiva === 'carrito' ? 'fill-1' : ''}">shopping_bag</span>
+                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Carrito</p>
+            </a>
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" onclick="abrirAdmin(); return false;">
+                <span class="material-symbols-outlined">admin_panel_settings</span>
+                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Admin</p>
+            </a>
+        </nav>
+    `;
+}
