@@ -51,7 +51,7 @@ function renderNavBar(pantallaActiva) {
                 <span class="material-symbols-outlined ${pantallaActiva === 'carrito' ? 'fill-1' : ''}">shopping_bag</span>
                 <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Carrito</p>
             </a>
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" onclick="abrirAdmin(); return false;">
+           <a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" onclick="abrirAdmin(); return false;">
     <span class="material-symbols-outlined">admin_panel_settings</span>
     <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Admin</p>
 </a>
