@@ -10,7 +10,7 @@ let productos = [
     // Repostería
     { id: 'p1', nombre: 'Croissant de Almendra', descripcion: 'Hojaldrado, mantecoso y relleno de crema de almendra.', precio: 3.75, categoria: 'reposteria', imagen: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAqd6PUZ-XegvW5J7HstufPD3lAL33cUEDbVJ-8iIkENlODpBA0q96SN8mH3ygdSK4hqE8K-uDN6hz-rIeBf742douEccSwDQYNtvzxpVuTmwJFjzab5Xn-ohFNn08iCDPsnLWk2QNo1ICXPegWkxplzn9HmIFAGH2W7OYmcpJFL4nfOR8oaHiWTMJhKgthBJRpr46dACTPp7FaUqG6Cez2trqhcbD8oODjGugfgcNIVqUyEw8tq3DTA8VVxY4_rhsEMhu2Pmatw8c' },
     { id: 'p2', nombre: 'Croissant de Chocolate', descripcion: 'Masa hojaldrada rellena de chocolate.', precio: 4.25, categoria: 'reposteria', imagen: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDGhAlyn7wW0fpHOgghzW9MsK0AR3TCGD8JF0QAZjK3FfalKqFZvE_JzG3ImgIE_g74lDWc8cgibtrKlhGOL8LHPbsoIDV7TItQADVRlB24v3YwPI5iJL8b2O8T9yyVjoXpUg4Bc_j8Vog490Qyz2y2qIpxSD7NrEA_u2xkPNnq79HurJzJ-7nx-GkUYRDS_PU0-G_7C6fwEYBlZoHXIRZJs89s_nW4JNmhfb3d_DwuJ0q5fvxJGqFAKmXLrMhWqFuQI_IKwALoFW4' },
-    // Té (nuevo)
+    // Té
     { id: 't1', nombre: 'Té Verde Matcha', descripcion: 'Matcha ceremonial de alta calidad.', precio: 4.50, categoria: 'te', imagen: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA6ZJZolXOX3FL-ZGTth-hGGx_LPzL-7UmH3Umq4dWbYxIafv99g4MSWEBJYWSNzqvd_ghtyQEsTAHQCmFveVGo8m1vHipLxcvgnu6GN-Pamf3kUC0GloNEWpizA7kDqGNTE_wR056T3q4aunzngq4DcW6-sT-dqXD9m7fP4CUJtCssfJjSKPiNvWSq6R4t3SW8YH5KI7oQY3HwpdDq2qFjqaDUY3pexNAyo6iaNvQ8fwOxsEJGN14KXAC7kP0VydsucroxcmymG4w' },
 ];
 
@@ -28,6 +28,35 @@ function getTotalItemsCarrito() {
 
 function formatearPrecio(precio) {
     return `$${precio.toFixed(2)}`;
+}
+
+// --- FUNCIÓN PARA ABRIR ADMIN (NUEVA) ---
+window.abrirAdmin = function() {
+    window.location.href = 'admin.html';
+};
+
+// --- FUNCIÓN PARA RENDERIZAR LA BARRA DE NAVEGACIÓN (ÚNICA Y CORREGIDA) ---
+function renderNavBar(pantallaActiva) {
+    return `
+        <nav class="fixed bottom-0 left-0 right-0 flex border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2 z-50" style="max-width: 448px; margin: 0 auto;">
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'inicio' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('inicio'); return false;">
+                <span class="material-symbols-outlined ${pantallaActiva === 'inicio' ? 'fill-1' : ''}">home</span>
+                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Inicio</p>
+            </a>
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'menu' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('menu'); return false;">
+                <span class="material-symbols-outlined ${pantallaActiva === 'menu' ? 'fill-1' : ''}">coffee</span>
+                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Menú</p>
+            </a>
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'carrito' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('carrito'); return false;">
+                <span class="material-symbols-outlined ${pantallaActiva === 'carrito' ? 'fill-1' : ''}">shopping_bag</span>
+                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Carrito</p>
+            </a>
+            <a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" onclick="abrirAdmin(); return false;">
+                <span class="material-symbols-outlined">admin_panel_settings</span>
+                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Admin</p>
+            </a>
+        </nav>
+    `;
 }
 
 // --- RENDERIZADO DE PANTALLAS ---
@@ -160,7 +189,6 @@ const pantallas = {
         }
         const totalItems = getTotalItemsCarrito();
         
-        // Mapeo de nombres de categoría para mostrar
         const nombreCategoria = {
             'cafe': 'Café',
             'te': 'Té',
@@ -241,7 +269,6 @@ const pantallas = {
     producto: function(productoId) {
         const producto = productos.find(p => p.id === productoId);
         if (!producto) return pantallas.inicio();
-
         const totalItems = getTotalItemsCarrito();
 
         return `
@@ -346,7 +373,6 @@ const pantallas = {
 
     // Carrito y Checkout
     carrito: function() {
-        const totalItems = getTotalItemsCarrito();
         let subtotal = 0;
         const itemsCarritoHTML = carrito.map(item => {
             const producto = productos.find(p => p.id === item.id);
@@ -379,7 +405,7 @@ const pantallas = {
         }).join('');
 
         const costoEnvio = 2.50;
-        const impuestos = subtotal * 0.08; // 8%
+        const impuestos = subtotal * 0.08;
         const total = subtotal + costoEnvio + impuestos;
 
         return `
@@ -480,67 +506,18 @@ const pantallas = {
         `;
     },
 
-    // --- VISTAS DE ADMIN (Simplificadas en Español) ---
+    // --- VISTAS DE ADMIN (Simplificadas - ya no se usan porque abrimos admin.html) ---
+    // Las dejamos por si acaso, pero no se mostrarán
     adminPedidos: function() {
-        return `
-            <div class="p-4 text-center">
-                <h2 class="text-2xl font-bold text-primary mb-4">Panel de Administración</h2>
-                <p class="text-slate-600">Gestión de Pedidos (simulado)</p>
-                <p class="text-sm text-slate-400 mt-2">Para una implementación completa, se necesitaría un backend.</p>
-                <button class="mt-4 bg-primary text-white px-4 py-2 rounded-lg" onclick="irAPantalla('inicio')">Volver al Inicio</button>
-            </div>
-        `;
+        return `<div class="p-4 text-center">Redirigiendo al panel de administración...</div>`;
     },
     adminPagos: function() {
-        return `
-            <div class="p-4 text-center">
-                <h2 class="text-2xl font-bold text-primary mb-4">Panel de Pagos</h2>
-                <p class="text-slate-600">Ventas y Pagos (simulado)</p>
-                <p class="text-sm text-slate-400 mt-2">Para una implementación completa, se necesitaría un backend.</p>
-                <button class="mt-4 bg-primary text-white px-4 py-2 rounded-lg" onclick="irAPantalla('inicio')">Volver al Inicio</button>
-            </div>
-        `;
+        return `<div class="p-4 text-center">Redirigiendo al panel de administración...</div>`;
     },
     adminInventario: function() {
-        return `
-            <div class="p-4 text-center">
-                <h2 class="text-2xl font-bold text-primary mb-4">Gestión de Inventario</h2>
-                <p class="text-slate-600">Control de Productos (simulado)</p>
-                <p class="text-sm text-slate-400 mt-2">Para una implementación completa, se necesitaría un backend.</p>
-                <button class="mt-4 bg-primary text-white px-4 py-2 rounded-lg" onclick="irAPantalla('inicio')">Volver al Inicio</button>
-            </div>
-        `;
+        return `<div class="p-4 text-center">Redirigiendo al panel de administración...</div>`;
     }
 };
-
-// --- FUNCIÓN PARA RENDERIZAR LA BARRA DE NAVEGACIÓN ---
-function renderNavBar(pantallaActiva) {
-    return `
-        <nav class="fixed bottom-0 left-0 right-0 flex border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2 z-50" style="max-width: 448px; margin: 0 auto;">
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'inicio' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('inicio'); return false;">
-                <span class="material-symbols-outlined ${pantallaActiva === 'inicio' ? 'fill-1' : ''}">home</span>
-                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Inicio</p>
-            </a>
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'menu' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('menu'); return false;">
-                <span class="material-symbols-outlined ${pantallaActiva === 'menu' ? 'fill-1' : ''}">coffee</span>
-                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Menú</p>
-            </a>
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'carrito' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('carrito'); return false;">
-                <span class="material-symbols-outlined ${pantallaActiva === 'carrito' ? 'fill-1' : ''}">shopping_bag</span>
-                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Carrito</p>
-            </a>
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" onclick="irAPantalla('adminPedidos'); return false;">
-                <span class="material-symbols-outlined">receipt_long</span>
-                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Pedidos</p>
-            </a>
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" onclick="irAPantalla('adminInventario'); return false;">
-                <span class="material-symbols-outlined">inventory</span>
-                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Admin</p>
-            </a>
-        </nav>
-    `;
-}
-
 
 // --- LÓGICA DE APLICACIÓN ---
 
@@ -571,7 +548,6 @@ window.agregarAlCarrito = function(productoId) {
     }
     guardarCarrito();
     
-    // Actualizar la vista actual
     const currentScreen = window.location.hash.substring(1) || 'inicio';
     if (currentScreen === 'carrito') {
         irAPantalla('carrito');
@@ -601,7 +577,7 @@ window.actualizarCantidadCarrito = function(productoId, nuevaCantidad) {
     irAPantalla('carrito');
 };
 
-// Función para procesar el pago (simulada)
+// Función para procesar el pago
 window.procesarPago = function() {
     alert('¡Pago procesado con éxito! (simulación)');
     carrito = [];
@@ -629,35 +605,3 @@ document.addEventListener('DOMContentLoaded', () => {
         irAPantalla(parts[0], parts[1]);
     }
 });
-
-// script.js - Añade esta función
-
-// Función para abrir el panel de administración
-window.abrirAdmin = function() {
-    // Abrir admin.html en la misma pestaña
-    window.location.href = 'admin.html';
-};
-
-// Actualiza la función renderNavBar para que el botón Admin use la nueva función
-function renderNavBar(pantallaActiva) {
-    return `
-        <nav class="fixed bottom-0 left-0 right-0 flex border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2 z-50" style="max-width: 448px; margin: 0 auto;">
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'inicio' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('inicio'); return false;">
-                <span class="material-symbols-outlined ${pantallaActiva === 'inicio' ? 'fill-1' : ''}">home</span>
-                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Inicio</p>
-            </a>
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'menu' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('menu'); return false;">
-                <span class="material-symbols-outlined ${pantallaActiva === 'menu' ? 'fill-1' : ''}">coffee</span>
-                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Menú</p>
-            </a>
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 ${pantallaActiva === 'carrito' ? 'text-primary' : 'text-slate-400 dark:text-slate-500 hover:text-primary transition-colors'}" href="#" onclick="irAPantalla('carrito'); return false;">
-                <span class="material-symbols-outlined ${pantallaActiva === 'carrito' ? 'fill-1' : ''}">shopping_bag</span>
-                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Carrito</p>
-            </a>
-            <a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#" onclick="abrirAdmin(); return false;">
-                <span class="material-symbols-outlined">admin_panel_settings</span>
-                <p class="text-[10px] font-bold leading-normal uppercase tracking-wider">Admin</p>
-            </a>
-        </nav>
-    `;
-}
